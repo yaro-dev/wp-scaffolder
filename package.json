@@ -1,0 +1,35 @@
+{
+  "name": "wp-scaffolder",
+  "version": "1.0.0",
+  "description": "Herramienta CLI para automatizar entornos WordPress + Vite",
+  "main": "src/main.js",
+  "type": "module",
+  "bin": {
+    "wp-dev": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wordpress",
+    "cli",
+    "vite",
+    "scaffold"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "degit": "^2.8.4",
+    "execa": "^8.0.1",
+    "figlet": "^1.7.0",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^9.2.12",
+    "open": "^10.0.3",
+    "ora": "^8.0.1",
+    "replace-in-file": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

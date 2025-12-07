@@ -4,6 +4,7 @@ import ora from 'ora';
 import figlet from 'figlet';
 import path from 'path';
 import open from 'open';
+import crypto from 'crypto';
 import { execa } from 'execa';  // <--- Necesario para git init
 import { setupGutenberg } from './tasks/blocks.js';
 
@@ -56,17 +57,25 @@ export async function run() {
 
     ]);
 
-    // Configuración
+    // --- GENERADOR DE CREDENCIALES CREATIVAS ---
+    const coolUsers = ['DevMaster', 'CodeNinja', 'WPRockstar', 'PixelHero', 'CyberDev', 'AdminPrime', 'NeonBoss'];
+    const randomUser = coolUsers[Math.floor(Math.random() * coolUsers.length)];
+
+    // Genera una contraseña segura de 12 caracteres (Hexadecimal)
+    const securePass = crypto.randomBytes(6).toString('hex');
+    // -------------------------------------------
+
+    // Configuración Global
     const projectUrl = `http://localhost/${answers.projectName}`;
     const config = {
         ...answers,
         projectPath: path.join(process.cwd(), answers.projectName),
         dbName: answers.projectName.replace(/-/g, '_'),
         dbHost: 'localhost',
-        // CREDENCIALES AUTOMÁTICAS PARA WP
-        adminUser: 'admin',
+        // Credenciales dinámicas
+        adminUser: randomUser,
         adminEmail: 'admin@local.test',
-        adminPass: 'password'
+        adminPass: securePass
     };
 
     console.log('\n🚀 Iniciando construcción...\n');
@@ -155,9 +164,10 @@ export async function run() {
     console.log(chalk.gray('┌──────────────────────────────────────────────────┐'));
     console.log(chalk.gray('│') + chalk.yellow.bold('  Acceso Administrativo                           ') + chalk.gray('│'));
     console.log(chalk.gray('├──────────────────────────────────────────────────┤'));
-    console.log(chalk.gray('│') + `  URL:   ${chalk.cyan(projectUrl + '/wp-admin')}      ` + chalk.gray('│'));
-    console.log(chalk.gray('│') + `  User:  ${chalk.green(config.adminUser)}                              ` + chalk.gray('│'));
-    console.log(chalk.gray('│') + `  Pass:  ${chalk.green(config.adminPass)}                           ` + chalk.gray('│'));
+    // Usamos padEnd para alinear el texto en la tabla
+    console.log(chalk.gray('│') + `  URL:   ${chalk.cyan((projectUrl + '/wp-admin').padEnd(33))} ` + chalk.gray('│'));
+    console.log(chalk.gray('│') + `  User:  ${chalk.green(config.adminUser.padEnd(33))} ` + chalk.gray('│'));
+    console.log(chalk.gray('│') + `  Pass:  ${chalk.green(config.adminPass.padEnd(33))} ` + chalk.gray('│'));
     console.log(chalk.gray('└──────────────────────────────────────────────────┘'));
 
     console.log('\nAbriendo el sitio en tu navegador...');

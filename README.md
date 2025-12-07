@@ -2,7 +2,7 @@
 
 Herramienta de línea de comandos diseñada para automatizar la creación de entornos de desarrollo locales para WordPress.
 
-Esta herramienta genera una instalación limpia de WordPress, configura la base de datos, instala un tema base (_s o _tw), configura un entorno de desarrollo moderno con Vite + PostCSS y prepara el repositorio Git dentro del tema.
+Esta herramienta genera una instalación limpia de WordPress, configura la base de datos, instala un tema base (_s o _tw), configura un entorno de desarrollo moderno con Vite + PostCSS y, opcionalmente, prepara un entorno de React para el desarrollo de Bloques de Gutenberg personalizados.
 
 ## Requisitos del Sistema
 
@@ -54,32 +54,44 @@ Sigue estos pasos para instalar la herramienta en tu sistema.
    * Nombre del proyecto: Será el nombre de la carpeta y la URL local.
    * Credenciales de BD: Usuario y contraseña de tu conexión local MySQL.
    * Tema Base: Selecciona entre _s (Underscores) o _tw (Tailwind Starter).
+   * Soporte de Bloques: Decide si deseas incluir la configuración de React para crear bloques nativos de Gutenberg.
 
 ### Resultado
 
 Al finalizar el proceso, obtendrás:
 * Una instalación fresca de WordPress en http://localhost/nombre-proyecto.
+* Credenciales de Administrador generadas aleatoriamente (se mostrarán en la consola al finalizar).
 * Base de datos creada y conectada automáticamente.
 * Tema seleccionado instalado, activo y renombrado (Namespacing de PHP corregido automáticamente).
-* Entorno Vite configurado dentro del tema para Hot Module Replacement (HMR).
-* Plugins de desarrollo instalados (Query Monitor, Classic Editor, etc.).
+* Entorno Vite configurado dentro del tema para estilos y JS globales.
+* (Opcional) Entorno @wordpress/scripts configurado para compilar bloques de React.
 * Repositorio Git inicializado dentro de la carpeta del tema.
 
 ## Estructura del Proyecto Generado
 
-La herramienta organiza el tema de la siguiente manera para facilitar el desarrollo moderno:
+La herramienta organiza el tema de la siguiente manera:
 
 wp-content/themes/mi-tema/
-├── src/                # Código fuente
-│   ├── css/            # Estilos (PostCSS/SASS)
-│   └── js/             # Scripts (ES Modules)
+├── src/
+│   ├── blocks/         # (Opcional) Código fuente de bloques React
+│   ├── css/            # Estilos globales (PostCSS/SASS)
+│   └── js/             # Scripts globales (ES Modules)
 ├── inc/
-│   └── vite-setup.php  # Puente de conexión entre WP y Vite
-├── dist/               # Archivos compilados para producción
-├── package.json        # Dependencias de Node (Vite, PostCSS)
-├── vite.config.js      # Configuración del compilador
-├── functions.php       # Incluye automáticamente el loader de Vite
+│   ├── vite-setup.php  # Puente de conexión entre WP y Vite
+│   └── blocks-loader.php # (Opcional) Auto-cargador de bloques compilados
+├── build/              # (Opcional) Salida compilada de los bloques
+├── dist/               # Salida compilada de Vite (Assets generales)
+├── package.json        # Scripts de desarrollo unificados
+├── vite.config.js      # Configuración de Vite
+├── functions.php       # Incluye automáticamente los loaders necesarios
 └── style.css
+
+## Comandos de Desarrollo
+
+Una vez creado el proyecto, entra a la carpeta del tema y utiliza:
+
+* npm run dev: Ejecuta en paralelo Vite (para estilos/JS globales) y el compilador de Bloques (modo observación).
+* npm run build: Genera los archivos finales optimizados para producción tanto de Vite como de los Bloques.
 
 ## Solución de Problemas Comunes
 

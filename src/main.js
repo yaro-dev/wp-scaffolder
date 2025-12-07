@@ -49,6 +49,19 @@ export async function run() {
             ]
         },
         {
+            type: 'checkbox',
+            name: 'selectedPacks',
+            message: 'Selecciona los paquetes de plugins adicionales:',
+            choices: [
+                { name: '🏢 Corporativo (ACF, CPT UI, Yoast, CF7)', value: 'corporate' },
+                { name: '🛒 E-commerce (WooCommerce, Stripe)', value: 'ecommerce' },
+                { name: '📡 Headless (WP GraphQL)', value: 'headless' },
+                { name: '🚀 Performance (Cache, WebP)', value: 'performance' }
+            ],
+            // Opcional: Puedes dejar marcados algunos por defecto
+            default: ['corporate']
+        },
+        {
             type: 'confirm',
             name: 'supportBlocks',
             message: '¿Deseas soporte para Bloques de Gutenberg personalizados?',
@@ -127,6 +140,8 @@ export async function run() {
     // PASO 4: Plugins
     spinner.start('Instalando plugins...');
     await installPlugins(config);
+    // --- AGREGA ESTA LÍNEA QUE FALTABA ---
+    spinner.succeed('Plugins instalados correctamente.');
 
     // PASO 5: GIT INIT (En la carpeta del tema)
     if (themePath) { // Solo si se creó un tema

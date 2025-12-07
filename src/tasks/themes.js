@@ -12,7 +12,7 @@ export async function setupTheme(themeBase, projectName) {
     // 1. DEFINICIÓN DE REPOSITORIOS
     const repos = {
         '_s': 'automattic/_s',
-        '_tw': 'gregsullivan/_tw' 
+        '_tw': 'gregsullivan/_tw'
     };
 
     const themeSlug = projectName.toLowerCase().replace(/[\s-]+/g, '_');
@@ -22,7 +22,7 @@ export async function setupTheme(themeBase, projectName) {
     // 2. Descargar tema
     const repo = repos[themeBase] || repos['_s'];
     const emitter = degit(repo, { cache: false, force: true });
-    
+
     try {
         await emitter.clone(themeDir);
     } catch (error) {
@@ -53,8 +53,8 @@ export async function setupTheme(themeBase, projectName) {
 
     // Glob pattern para buscar en todo el tema
     const filesToScan = [
-        `${themeDirSanitized}/**/*.php`, 
-        `${themeDirSanitized}/**/*.css`, 
+        `${themeDirSanitized}/**/*.php`,
+        `${themeDirSanitized}/**/*.css`,
         `${themeDirSanitized}/*.json`
     ];
 
@@ -63,8 +63,8 @@ export async function setupTheme(themeBase, projectName) {
         try {
             await replace({
                 files: filesToScan,
-                from: [ /_s_/g, /'_s'/g, / _s /g, /_s- /g ],
-                to: [ `${themeSlug}_`, `'${themeSlug}'`, ` ${themeSlug} `, `${themeSlug}- ` ],
+                from: [/_s_/g, /'_s'/g, / _s /g, /_s- /g],
+                to: [`${themeSlug}_`, `'${themeSlug}'`, ` ${themeSlug} `, `${themeSlug}- `],
                 ignore: ignoreFiles
             });
 
@@ -77,22 +77,22 @@ export async function setupTheme(themeBase, projectName) {
             console.error('Error no crítico renombrando _s:', error.message);
         }
     }
-    
+
     // Lógica para _tw
     if (themeBase === '_tw') {
         try {
             await replace({
                 files: filesToScan,
-                from: [ 
-                    /_tw_/g,      
-                    /'_tw'/g,     
-                    / _tw /g,     
-                    /Text Domain: _tw/g 
-                ], 
-                to: [ 
-                    `${themeSlug}_`, 
-                    `'${themeSlug}'`, 
-                    ` ${projectName} `, 
+                from: [
+                    /_tw_/g,
+                    /'_tw'/g,
+                    / _tw /g,
+                    /Text Domain: _tw/g
+                ],
+                to: [
+                    `${themeSlug}_`,
+                    `'${themeSlug}'`,
+                    ` ${projectName} `,
                     `Text Domain: ${themeSlug}`
                 ],
                 ignore: ignoreFiles
@@ -111,13 +111,13 @@ export async function setupTheme(themeBase, projectName) {
     // 6. Activar el tema
     try {
         // Ahora que aplanamos la carpeta, el slug SIEMPRE coincide
-        await execa('wp.bat', ['theme', 'activate', themeSlug], { 
-            cwd: projectRoot, 
-            shell: true 
+        await execa('wp.bat', ['theme', 'activate', themeSlug], {
+            cwd: projectRoot,
+            shell: true
         });
     } catch (error) {
         console.error(`Aviso: Activa el tema manualmente en wp-admin si no se activó. Error: ${error.message}`);
     }
 
-    return themeDir; 
+    return themeDir;
 }

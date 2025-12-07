@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "create-block/my-first-block",
+  "version": "0.1.0",
+  "title": "My First Block",
+  "category": "widgets",
+  "icon": "smiley",
+  "description": "Un bloque de ejemplo generado por WP-Scaffolder.",
+  "supports": {
+    "html": false
+  },
+  "textdomain": "my-first-block",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

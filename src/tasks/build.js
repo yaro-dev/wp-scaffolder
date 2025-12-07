@@ -30,7 +30,9 @@ export async function setupBuildTools(themePath) {
             "postcss": "^8.4.0",
             "postcss-nested": "^6.0.0",
             "autoprefixer": "^10.0.0",
-            "sass": "^1.70.0"
+            "sass": "^1.70.0",
+            "npm-run-all": "^4.1.5",
+            "@wordpress/scripts": "^26.0.0"
         }
     };
 

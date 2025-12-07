@@ -3,8 +3,9 @@ import chalk from 'chalk';
 import ora from 'ora';
 import figlet from 'figlet';
 import path from 'path';
-import open from 'open';        // <--- NUEVO
+import open from 'open';
 import { execa } from 'execa';  // <--- Necesario para git init
+import { setupGutenberg } from './tasks/blocks.js';
 
 // Tareas
 import { installWordPress } from './tasks/wp-core.js';
@@ -45,7 +46,14 @@ export async function run() {
                 { name: '_s (Underscores)', value: '_s' },
                 { name: '_tw (Tailwind)', value: '_tw' }
             ]
+        },
+        {
+            type: 'confirm',
+            name: 'supportBlocks',
+            message: '¿Deseas soporte para Bloques de Gutenberg personalizados?',
+            default: true
         }
+
     ]);
 
     // Configuración
@@ -95,6 +103,18 @@ export async function run() {
         spinner.fail('Error en Vite.');
     }
 
+    // PASO 3.5: GUTENBERG BLOCKS
+    if (config.supportBlocks && themePath) {
+        spinner.start('Configurando entorno de Bloques (React)...');
+        try {
+            await setupGutenberg(themePath);
+            spinner.succeed('Soporte de Bloques listo.');
+        } catch (error) {
+            spinner.fail('Error configurando Bloques.');
+            console.error(error); // Para depurar
+        }
+    }
+
     // PASO 4: Plugins
     spinner.start('Instalando plugins...');
     await installPlugins(config);
@@ -107,7 +127,7 @@ export async function run() {
             // Así el repo se crea dentro de wp-content/themes/tu-tema/
             const gitOptions = { cwd: themePath, shell: true };
 
-            // 1. Iniciar
+            // 1. Git init
             await execa('git', ['init'], gitOptions);
 
             // 2. Configurar usuario local para evitar errores si no tienes git global
@@ -122,7 +142,7 @@ export async function run() {
 
             spinner.succeed('Git inicializado dentro del tema.');
         } catch (error) {
-            // Si falla, mostramos la ruta donde intentó hacerlo para que valides tu teoría
+            // Si falla, mostramos la ruta donde intentó hacerlo
             spinner.warn(`No se pudo iniciar Git en: ${themePath}`);
             // console.log(error.stderr); // Descomenta si quieres ver el error técnico
         }
